@@ -38,7 +38,7 @@ MODE_COMPLEX_WHITE = "complex_white"
     "astrbot_plugin_wake_list",
     "DspaCto",
     "黑/白名单，优先级低于管理员",
-    "1.1.0",
+    "1.2.0",
 )
 class AdminWakeGate(Star):
     def __init__(self, context: Context, config: AstrBotConfig):
@@ -165,18 +165,30 @@ class AdminWakeGate(Star):
     # ------------------------------------------------------------------
     @filter.event_message_type(filter.EventMessageType.ALL, priority=10000)
     async def block_non_admin_command(self, event: AstrMessageEvent):
-        """早拦：非管理员的 "/指令" 在指令 handler 执行前停止。"""
+        """早拦：非管理员的 "/指令" 在指令 handler 执行前停止。
+
+        非指令的 "/文字" 默认放行给 on_message 记录上下文，
+        再由 on_llm_request 晚拦；若关闭了“加入上下文”，则在这里直接停止。
+        """
         if not self._should_block(event):
             return
-        if not self._is_command_event(event):
-            # 非指令的 "/文字" 交给 on_llm_request 晚拦，
-            # 先让 on_message 把它记进群聊上下文
+        if self._is_command_event(event):
+            logger.info(
+                f"[admin-wake-gate] 拦截非管理员指令 mode={self.config.get('mode')} "
+                f"sender={event.get_sender_id()} umo={event.unified_msg_origin}"
+            )
+            event.stop_event()
             return
-        logger.info(
-            f"[admin-wake-gate] 拦截非管理员指令 mode={self.config.get('mode')} "
-            f"sender={event.get_sender_id()} umo={event.unified_msg_origin}"
-        )
-        event.stop_event()
+        # 非指令的 "/文字"
+        if not bool(self.config.get("blocked_in_context", True)):
+            logger.info(
+                f"[admin-wake-gate] 拦截非管理员唤醒（不入上下文） "
+                f"mode={self.config.get('mode')} sender={event.get_sender_id()} "
+                f"umo={event.unified_msg_origin}"
+            )
+            event.stop_event()
+            return
+        # 默认：先让 on_message 把它记进群聊上下文，稍后 on_llm_request 拦截
 
     @filter.on_llm_request(priority=1000)
     async def block_non_admin_llm(self, event: AstrMessageEvent, req):
