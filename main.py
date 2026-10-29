@@ -39,7 +39,7 @@ MODE_COMPLEX_WHITE = "complex_white"
     "astrbot_plugin_wake_list",
     "DspaCto",
     "黑/白名单，优先级低于管理员",
-    "1.2.3",
+    "1.2.4",
 )
 class AdminWakeGate(Star):
     def __init__(self, context: Context, config: AstrBotConfig):
