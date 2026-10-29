@@ -1,6 +1,7 @@
 """管理员唤醒门禁（Admin Wake Gate）
 
-作用：只允许 AstrBot 管理员使用唤醒词（默认 "/"）唤醒机器人。
+作用：只允许 AstrBot 管理员使用唤醒词唤醒机器人。
+唤醒词不是写死的，取自当前会话所属配置文件的 wake_prefix（每个配置文件可以不同）。
 
 四种模式（mode）：
 - blacklist        黑名单：名单内的会话/用户限制；其余放行。
@@ -38,7 +39,7 @@ MODE_COMPLEX_WHITE = "complex_white"
     "astrbot_plugin_wake_list",
     "DspaCto",
     "黑/白名单，优先级低于管理员",
-    "1.2.1",
+    "1.2.2",
 )
 class AdminWakeGate(Star):
     def __init__(self, context: Context, config: AstrBotConfig):
@@ -128,12 +129,21 @@ class AdminWakeGate(Star):
         return ""
 
     def _wake_prefixes(self, event: AstrMessageEvent) -> list[str]:
-        """读取该会话配置里的唤醒词列表（默认 ["/"]）。"""
+        """读取该会话所属配置文件的唤醒词列表（wake_prefix）。
+
+        - 配置缺失（取不到）时才回退到 AstrBot 默认 ["/"]；
+        - 配置里显式清空（空列表）表示该 bot 没有前缀唤醒词，
+          此时返回空列表，本插件也不拦“前缀”类消息。
+        """
         try:
             cfg = self.context.get_config(umo=event.unified_msg_origin)
-            prefixes = cfg.get("wake_prefix", ["/"]) or ["/"]
         except Exception:
-            prefixes = ["/"]
+            return ["/"]
+        prefixes = cfg.get("wake_prefix", None)
+        if prefixes is None:
+            return ["/"]
+        if isinstance(prefixes, str):
+            prefixes = [prefixes]
         return [str(p) for p in prefixes if str(p)]
 
     def _starts_with_wake_prefix(self, event: AstrMessageEvent) -> bool:
@@ -165,9 +175,9 @@ class AdminWakeGate(Star):
     # ------------------------------------------------------------------
     @filter.event_message_type(filter.EventMessageType.ALL, priority=10000)
     async def block_non_admin_command(self, event: AstrMessageEvent):
-        """早拦：非管理员的 "/指令" 在指令 handler 执行前停止。
+        """早拦：非管理员的“唤醒词+指令”在指令 handler 执行前停止。
 
-        非指令的 "/文字" 默认放行给 on_message 记录上下文，
+        非指令的“唤醒词+文字”默认放行给 on_message 记录上下文，
         再由 on_llm_request 晚拦；若关闭了“加入上下文”，则在这里直接停止。
         """
         if not self._should_block(event):
