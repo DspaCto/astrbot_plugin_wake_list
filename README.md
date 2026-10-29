@@ -16,8 +16,8 @@
 一行一条，和 AstrBot 核心白名单一致：
 
 ```
-napcat_qq:GroupMessage:<群号>     # 群条目：作用于该群
-napcat_qq:FriendMessage:<QQ号>    # 用户条目：作用于该用户的私聊，以及他在群里的发言
+<机器人名称>:GroupMessage:<群号>     # 群条目：作用于该群
+<机器人名称>:FriendMessage:<QQ号>    # 用户条目：作用于该用户的私聊，以及他在群里的发言
 ```
 
 空行和以 `#` 开头的行会被忽略。
