@@ -11,8 +11,8 @@
                    Q 号层黑名单优先（黑名单用户即使在白名单群里也限制）。
 
 名单格式（一行一条，和 AstrBot 核心白名单一致）：
-- napcat_qq:GroupMessage:<群号>   群条目，作用于该群
-- napcat_qq:FriendMessage:<QQ号>  用户条目，作用于该用户的私聊和他的群内发言
+- <机器人名称>:GroupMessage:<群号>   群条目，作用于该群
+- <机器人名称>:FriendMessage:<QQ号>  用户条目，作用于该用户的私聊和他的群内发言
 空行和以 # 开头的行忽略。
 
 管理员始终豁免（管理员判定来自 AstrBot 官方 admins_id，插件不保存任何账号）。
@@ -38,7 +38,7 @@ MODE_COMPLEX_WHITE = "complex_white"
     "astrbot_plugin_wake_list",
     "DspaCto",
     "黑/白名单，优先级低于管理员",
-    "1.2.0",
+    "1.2.1",
 )
 class AdminWakeGate(Star):
     def __init__(self, context: Context, config: AstrBotConfig):
