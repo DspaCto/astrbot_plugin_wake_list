@@ -2,7 +2,7 @@ name: astrbot_plugin_wake_list
 display_name: 唤醒词白名单
 short_desc: 按群/按人限制谁能使用唤醒词，管理员始终豁免
 desc: 黑/白名单，优先级低于管理员
-version: v1.2.3
+version: v1.2.4
 author: DspaCto
 repo: https://github.com/DspaCto/astrbot_plugin_wake_list
 astrbot_version: ">=4.24.1"
