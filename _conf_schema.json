@@ -19,7 +19,7 @@
     "editor_mode": true,
     "editor_language": "plaintext",
     "default": "",
-    "hint": "一行一条：napcat_qq:GroupMessage:<群号> 或 napcat_qq:FriendMessage:<QQ号>"
+    "hint": "一行一条：<机器人名称>:GroupMessage:<群号> 或 <机器人名称>:FriendMessage:<QQ号>"
   },
   "whitelist": {
     "description": "白名单",
@@ -27,7 +27,7 @@
     "editor_mode": true,
     "editor_language": "plaintext",
     "default": "",
-    "hint": "一行一条：napcat_qq:GroupMessage:<群号> 或 napcat_qq:FriendMessage:<QQ号>"
+    "hint": "一行一条：<机器人名称>:GroupMessage:<群号> 或 <机器人名称>:FriendMessage:<QQ号>"
   },
   "blocked_in_context": {
     "description": "被屏蔽的唤醒词/句是否加入上下文",
