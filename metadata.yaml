@@ -1,7 +1,7 @@
 name: astrbot_plugin_wake_list
 display_name: 唤醒词白名单
 desc: 黑/白名单，优先级低于管理员
-version: v1.1.0
+version: v1.2.0
 author: DspaCto
 repo: https://github.com/DspaCto/astrbot_plugin_wake_list
 astrbot_version: ">=4.24.1"
