@@ -1,0 +1,32 @@
+{
+  "mode": {
+    "description": "当前模式",
+    "type": "string",
+    "options": ["blacklist", "whitelist", "complex_black", "complex_white"],
+    "labels": ["黑名单", "白名单", "复杂模式-黑名单", "复杂模式-白名单"],
+    "subtitles": [
+      "",
+      "",
+      "黑名单群里的白名单群友仍可用",
+      "白名单群里的黑名单群友仍受限"
+    ],
+    "default": "blacklist",
+    "hint": "注意：管理员权限>此插件"
+  },
+  "blacklist": {
+    "description": "黑名单",
+    "type": "text",
+    "editor_mode": true,
+    "editor_language": "plaintext",
+    "default": "",
+    "hint": "一行一条：napcat_qq:GroupMessage:<群号> 或 napcat_qq:FriendMessage:<QQ号>"
+  },
+  "whitelist": {
+    "description": "白名单",
+    "type": "text",
+    "editor_mode": true,
+    "editor_language": "plaintext",
+    "default": "",
+    "hint": "一行一条：napcat_qq:GroupMessage:<群号> 或 napcat_qq:FriendMessage:<QQ号>"
+  }
+}
